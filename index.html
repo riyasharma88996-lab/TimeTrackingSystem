@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111827">
+    <title>TimeTrack | Productivity Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <a class="brand" href="#dashboard">
+            <span class="brand-icon">◷</span>
+            <span>TimeTrack<small>PRODUCTIVITY MANAGER</small></span>
+        </a>
+
+        <p class="nav-label">WORKSPACE</p>
+        <nav>
+            <a class="active" href="#dashboard"><span>▦</span> Dashboard</a>
+            <a href="#tasks"><span>☷</span> My Tasks</a>
+            <a href="#timer"><span>◷</span> Time Tracker</a>
+            <a href="#reports"><span>▤</span> Reports</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="tip-icon">✦</div>
+            <h3>Stay focused.</h3>
+            <p>Small steps every day lead to big results.</p>
+            <a href="#timer" class="tip-link">Start a session →</a>
+        </div>
+
+        <p class="sidebar-footer">TIMETRACK v2.0 · ACADEMIC PROJECT</p>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="mobile-brand">◷ TimeTrack</div>
+            <div class="breadcrumb">WORKSPACE <span>/</span> OVERVIEW</div>
+            <button id="themeBtn" class="icon-btn" type="button"
+                    aria-label="Toggle dark mode" title="Toggle dark mode">☾</button>
+        </header>
+
+        <section id="dashboard" class="page-heading">
+            <div>
+                <p class="eyebrow">YOUR PRODUCTIVITY AT A GLANCE</p>
+                <h1>Good work starts with a plan.</h1>
+                <p class="muted">Manage your tasks, track your time, and build better habits.</p>
+            </div>
+            <div class="date-box">
+                <span>▦</span>
+                <div><small>TODAY</small><strong id="today">Loading date...</strong></div>
+            </div>
+        </section>
+
+        <section class="stats">
+            <article class="stat-card">
+                <div class="stat-top"><span>Total tracked time</span><span class="stat-icon purple">◷</span></div>
+                <h2 id="totalTime">00:00:00</h2>
+                <p>Across all tasks</p>
+            </article>
+            <article class="stat-card">
+                <div class="stat-top"><span>Total tasks</span><span class="stat-icon blue">☷</span></div>
+                <h2 id="totalTasks">0</h2>
+                <p>In your workspace</p>
+            </article>
+            <article class="stat-card">
+                <div class="stat-top"><span>Completed</span><span class="stat-icon green">✓</span></div>
+                <h2 id="completedTasks">0</h2>
+                <p>Tasks finished</p>
+            </article>
+            <article class="stat-card">
+                <div class="stat-top"><span>Pending</span><span class="stat-icon orange">◌</span></div>
+                <h2 id="pendingTasks">0</h2>
+                <p>Still to do</p>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel timer-panel" id="timer">
+                <div class="panel-heading">
+                    <div><p class="eyebrow">FOCUS MODE</p><h2>Time Tracker</h2></div>
+                    <span id="liveBadge" class="status-badge"><span></span> Ready</span>
+                </div>
+
+                <label for="taskSelect">Select a task to work on</label>
+                <select id="taskSelect">
+                    <option value="">Choose a pending task...</option>
+                </select>
+
+                <div class="timer-ring">
+                    <div>
+                        <div id="timerDisplay" class="timer-display">00:00:00</div>
+                        <p id="timerCaption">SESSION DURATION</p>
+                    </div>
+                </div>
+
+                <p id="timerStatus" class="muted center">Ready when you are.</p>
+
+                <div class="button-row">
+                    <button id="startBtn" class="btn primary">▶ Start timer</button>
+                    <button id="stopBtn" class="btn secondary" disabled>■ Stop timer</button>
+                </div>
+                <p class="timer-hint">Choose a task before starting a session.</p>
+            </article>
+
+            <article class="panel chart-panel">
+                <div class="panel-heading">
+                    <div><p class="eyebrow">YOUR PROGRESS</p><h2>Task Completion</h2></div>
+                </div>
+                <div class="chart-wrap"><canvas id="taskChart"></canvas></div>
+                <div class="chart-legend">
+                    <span><i class="legend-dot completed-dot"></i> Completed</span>
+                    <span><i class="legend-dot pending-dot"></i> Pending</span>
+                </div>
+                <div class="completion-footer">
+                    <span>Completion rate</span>
+                    <strong id="completionRate">0%</strong>
+                </div>
+                <div class="progress-track"><div id="progressBar"></div></div>
+            </article>
+        </section>
+
+        <section class="panel task-panel" id="tasks">
+            <div class="panel-heading task-heading">
+                <div><p class="eyebrow">PLAN YOUR WORK</p><h2>My Tasks</h2>
+                    <p class="muted">Organize your work and stay on track.</p></div>
+                <button id="addTaskBtn" class="btn primary">＋ Add new task</button>
+            </div>
+
+            <form id="taskForm" class="task-form" hidden>
+                <div class="form-field">
+                    <label for="taskName">Task name</label>
+                    <input id="taskName" type="text" maxlength="99"
+                           placeholder="e.g. Complete DSA practice" required>
+                </div>
+                <div class="form-field">
+                    <label for="taskCategory">Category</label>
+                    <input id="taskCategory" type="text" maxlength="99"
+                           placeholder="e.g. Study, Work, Personal" required>
+                </div>
+                <div class="form-actions">
+                    <button id="cancelTaskBtn" type="button" class="btn secondary">Cancel</button>
+                    <button id="saveTaskBtn" type="submit" class="btn primary">Save task</button>
+                </div>
+            </form>
+
+            <div class="task-tools">
+                <input id="searchTasks" type="search" placeholder="⌕  Search tasks...">
+                <select id="filterTasks" aria-label="Filter tasks">
+                    <option value="all">All tasks</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Task</th><th>Category</th><th>Time spent</th><th>Status</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="taskTable"></tbody>
+                </table>
+            </div>
+            <p id="taskCountLabel" class="muted small">0 tasks</p>
+        </section>
+
+        <section class="panel report-panel" id="reports">
+            <div class="panel-heading">
+                <div><p class="eyebrow">YOUR ACTIVITY</p><h2>Productivity Report</h2>
+                    <p class="muted">Download your tasks and recorded time for further analysis.</p></div>
+                <button id="exportBtn" class="btn secondary">↓ Export CSV</button>
+            </div>
+            <div class="report-note"><span>ⓘ</span> Your task data is saved in this browser. Export a CSV backup regularly.</div>
+        </section>
+
+        <footer>© <span id="year"></span> TimeTrack · Academic Project · HTML, CSS, JavaScript & C</footer>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
